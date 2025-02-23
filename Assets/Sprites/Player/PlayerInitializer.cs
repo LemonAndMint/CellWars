@@ -1,3 +1,4 @@
+using Network;
 using Player;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace Player
     {
         public PlayerInput playerInput;
         public Movement playerMovement;
+        public GameObject playerGO;
+        public CellNetwork playerCellNetwork;
 
         void Start()
         {
@@ -16,6 +19,7 @@ namespace Player
             {
                 
                 playerInput.OnKeyInput += playerMovement.Move;
+                playerCellNetwork = new CellNetwork(new CellStats(), playerGO);
 
             }
             catch (System.Exception e)

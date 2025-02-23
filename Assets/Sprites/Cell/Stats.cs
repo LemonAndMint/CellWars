@@ -1,15 +1,17 @@
+using System;
 using UnityEngine;
 
 public class CellStats
 {
-    public int ID; //GUID
+    public string ID; //GUID
     public float Mass; //Different from rigidbody mass.
     public float MoveSpeed;
     public Vector3 MoveVector;
 
     public CellStats(){
 
-        //Generate unique GUID for the cell.
+        ID = Guid.NewGuid().ToString();
+
         //Generate random Mass, MoveSpeed and MoveVector for the object.
 
     }
