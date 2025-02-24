@@ -169,7 +169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &46644259
 Rigidbody2D:
   serializedVersion: 5
@@ -266,7 +266,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &82404338
 Rigidbody2D:
   serializedVersion: 5
@@ -460,7 +460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &142727595
 Rigidbody2D:
   serializedVersion: 5
@@ -1171,8 +1171,9 @@ GameObject:
   m_Component:
   - component: {fileID: 421671626}
   - component: {fileID: 421671625}
+  - component: {fileID: 421671627}
   m_Layer: 0
-  m_Name: Global Scripts
+  m_Name: Test Scripts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1185,7 +1186,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421671624}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e634da96a2b78da4c8396f58966b5ccb, type: 3}
   m_Name: 
@@ -1218,6 +1219,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &421671627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421671624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca2a23e4ac17c447b9e5b0e178c1ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Mass: 0
+  MoveSpeed: 0
+  playerActions: {fileID: 0}
 --- !u!1 &456104103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1821,13 +1837,14 @@ GameObject:
   - component: {fileID: 852106217}
   - component: {fileID: 852106216}
   - component: {fileID: 852106215}
+  - component: {fileID: 852106218}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &852106214
 Transform:
   m_ObjectHideFlags: 0
@@ -1881,8 +1898,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 852106216}
-  playerMovement: {fileID: 852106215}
+  playerMovement: {fileID: 0}
   playerGO: {fileID: 135800103}
+--- !u!114 &852106218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852106213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44196e6a8e835e4796612727c496064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRB: {fileID: 0}
 --- !u!1 &930694856
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,7 +2050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1023788824
 Rigidbody2D:
   serializedVersion: 5
@@ -2759,7 +2789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1530362107
 Rigidbody2D:
   serializedVersion: 5
@@ -2922,7 +2952,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1603101297
 Rigidbody2D:
   serializedVersion: 5
@@ -3019,7 +3049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1645907242
 Rigidbody2D:
   serializedVersion: 5
@@ -3377,7 +3407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1755820091
 Rigidbody2D:
   serializedVersion: 5
@@ -3942,7 +3972,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1983530572
 Rigidbody2D:
   serializedVersion: 5
@@ -4039,7 +4069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &2048685795
 Rigidbody2D:
   serializedVersion: 5
@@ -4125,6 +4155,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
+  - {fileID: 421671626}
   - {fileID: 852106214}
   - {fileID: 135800104}
   - {fileID: 615390778}
@@ -4138,4 +4169,3 @@ SceneRoots:
   - {fileID: 46644261}
   - {fileID: 2048685797}
   - {fileID: 1983530574}
-  - {fileID: 421671626}

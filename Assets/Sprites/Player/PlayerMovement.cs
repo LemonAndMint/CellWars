@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utils.Direction;
 
-public class Movement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    public Rigidbody2D targetRB;
     private Transform targetTransform;
+    public Rigidbody2D targetRB;
 
-    private void Start() {
+    private void Start(){
         
         if(targetRB == null){
 
@@ -21,13 +21,15 @@ public class Movement : MonoBehaviour
 
     }
 
-    public void Move(List<Direction> directions){
+    
+    public void Move(List<Direction> directions, float speed){
 
         Vector2 moveVector = DirectionConverter.DirectionsToVector2(directions);
 
-        targetRB.MovePosition(moveVector);
+        targetRB.MovePosition(moveVector * Time.deltaTime * speed);
         
     }
+
 
     public void Rotate(Vector3 mousePos){
 
@@ -35,21 +37,12 @@ public class Movement : MonoBehaviour
 
         Vector3 mouse_pos = mousePos;
         mouse_pos.z = Camera.main.transform.position.z; 
-        Vector3 object_pos = Camera.main.WorldToScreenPoint(targetRB.transform.position);
+        Vector3 object_pos = Camera.main.WorldToScreenPoint(targetTransform.position);
         mouse_pos.x = mouse_pos.x - object_pos.x;
         mouse_pos.y = mouse_pos.y - object_pos.y;
         float angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg - 90;
-        targetRB.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        targetTransform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
     }
-
-    void OnDrawGizmos()
-    {
-
-        Gizmos.color = Color.red;
-        Vector3 direction = targetRB.transform.TransformDirection(Vector3.up) * 5;
-        Gizmos.DrawRay(targetRB.transform.position, direction);
-        
-    }
-
+    
 }

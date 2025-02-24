@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Network;
 using Player;
 using UnityEngine;
+using Utils.Direction;
 
 namespace Player
 {
@@ -8,9 +10,11 @@ namespace Player
     public class PlayerActions : MonoBehaviour
     {
         public PlayerInput playerInput;
-        public Movement playerMovement;
+        public PlayerMovement playerMovement;
         public GameObject playerGO;
-        public CellNetwork playerCellNetwork;
+        public CellNetwork<PlayerNode, PlayerStats> playerCellNetwork;
+
+        public PlayerStats _cellStats; //FOR TESTING PURPOSES. WILL BE DELETED
 
         void Start()
         {
@@ -18,16 +22,24 @@ namespace Player
             try
             {
                 
-                playerInput.OnKeyInput += playerMovement.Move;
+                playerInput.OnKeyInput += Move;
                 playerInput.OnMouseInput += playerMovement.Rotate;
 
-                playerCellNetwork = new CellNetwork(new CellStats(), playerGO);
+                playerCellNetwork = CellNetworkCreater.CreateNetwork(new PlayerStats(), playerGO);
+
+                _cellStats = playerCellNetwork.MainCellNode.Stats;
 
             }
             catch (System.Exception e)
             {
                 Debug.LogError(e.Data);
             }
+
+        }
+
+        public void Move(List<Direction> directions){
+
+            playerMovement.Move(directions, _cellStats.MoveSpeed);
 
         }
 

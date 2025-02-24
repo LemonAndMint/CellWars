@@ -1,25 +1,40 @@
 using System;
 using UnityEngine;
 
-public class PlayerStats{
+public class Stats{
 
-    public Vector2 TotalForcePenalty;
-    public float TotalSpeedPenalty;
-
-}
-
-public class CellStats
-{
     public string ID; //GUID
     public float Mass; //Different from rigidbody mass.
     public float MoveSpeed;
-    public Vector3 MoveVector;
 
-    public CellStats(){
+     public Stats(){
 
         ID = Guid.NewGuid().ToString();
 
         //Generate random Mass, MoveSpeed and MoveVector for the object.
+
+    }
+
+}
+
+public class CellStats : Stats
+{
+    public Vector3 MoveVector;
+
+    public CellStats() : base(){
+
+
+    }
+
+}
+
+public class PlayerStats : Stats{
+
+    public Vector2 TotalForcePenalty;
+    public float TotalSpeedPenalty;
+
+    public PlayerStats() : base(){
+
 
     }
 
