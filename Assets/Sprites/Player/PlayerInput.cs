@@ -9,7 +9,15 @@ namespace Player
     public class PlayerInput : MonoBehaviour
     {
         public delegate void KeyboardEvent(List<Direction> directions);
+        public delegate void MouseEvent(Vector3 mousePos);
+        public delegate void MouseButtonEvent();
+
         public event KeyboardEvent OnKeyInput;
+        public event MouseEvent OnMouseInput;
+        public event MouseButtonEvent OnBindInput;
+        public event MouseButtonEvent OnUnbindInput;
+
+
 
         private List<Direction> directions = new List<Direction>();
 
@@ -17,6 +25,7 @@ namespace Player
         void LateUpdate()
         {
             
+            //KEYBOARD ++
             directions.Clear();
 
             if(Input.GetKey(KeyCode.W)){
@@ -46,6 +55,27 @@ namespace Player
             if(directions.Count > 0 && directions != null){
 
                 OnKeyInput?.Invoke(directions);
+
+            }
+            //KEYBOARD --
+
+            float mouseXAxis = Input.GetAxis("Mouse X");
+
+            if(mouseXAxis != 0){
+
+                OnMouseInput?.Invoke(Input.mousePosition);
+
+            }
+
+            if(Input.GetKeyDown(KeyCode.Mouse0)){
+
+                OnBindInput?.Invoke();
+
+            }
+
+            if(Input.GetKeyDown(KeyCode.Mouse1)){
+
+                OnUnbindInput?.Invoke();
 
             }
 

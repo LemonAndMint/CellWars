@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Player
 {
     
-    public class PlayerInitializer : MonoBehaviour
+    public class PlayerActions : MonoBehaviour
     {
         public PlayerInput playerInput;
         public Movement playerMovement;
@@ -19,6 +19,8 @@ namespace Player
             {
                 
                 playerInput.OnKeyInput += playerMovement.Move;
+                playerInput.OnMouseInput += playerMovement.Rotate;
+
                 playerCellNetwork = new CellNetwork(new CellStats(), playerGO);
 
             }
@@ -26,6 +28,12 @@ namespace Player
             {
                 Debug.LogError(e.Data);
             }
+
+        }
+
+        public void Bound(){
+
+
 
         }
 

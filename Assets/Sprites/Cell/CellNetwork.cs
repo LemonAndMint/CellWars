@@ -5,53 +5,95 @@ namespace Network
 {
     public class CellNetwork
     {
-        public CellNode MainCellNode;
+        private CellNode _mainCellNode;
+        public CellNode MainCellNode{ get => _mainCellNode; }
 
         public CellNetwork(CellStats cellStats, GameObject CellGO){
 
-            MainCellNode = new CellNode(cellStats, CellGO);
+            _mainCellNode = new CellNode(cellStats, CellGO);
 
         }
 
-        //We will add the "cells" based on their bounding order. Which cell is bounded first would be
-        //the nearest left node. 
-        public void Add(string currCellID, CellStats cellToBeBoundStat, GameObject CellGO, float boundLength){
+        //We will add the "cells" based on which cell bounded them.
+        public void Add(string parentCellID, CellStats cellToBeBoundStat, GameObject CellGO, float boundLength){
 
-            CellNode? targetCellNode = _searchRecursive(MainCellNode, currCellID);
+            CellNode? parentCellNode = _searchRecursive(_mainCellNode, parentCellID);
 
-            if(targetCellNode != null){
+            if(parentCellNode != null){
 
-                targetCellNode.Add(cellToBeBoundStat, CellGO, boundLength);
+                parentCellNode.Add(cellToBeBoundStat, CellGO, boundLength);
 
             }
 
         }
 
+        public void Remove(string taretCellID){
+
+            CellNode? parentCellNode = _searchRecursive(_mainCellNode, taretCellID);
+
+            if(parentCellNode != null){
+
+                parentCellNode.Remove(taretCellID);
+
+            }
+
+        }
+
+        public void Display(CellNode currNode, ref string displayString){
+
+
+            for (int i = 0; i < currNode.Nodes.Length; i++)
+            {
+                
+                if(currNode.Nodes[i]?.NextNode != null){
+
+                    Display(currNode.Nodes[i]?.NextNode, ref displayString);
+
+                }
+
+            }
+
+            displayString+= currNode.CellGO.name +  "-";
+
+        }
+
+
+        /// <summary>
+        /// </summary>
+        /// <param name="currNode"></param>
+        /// <param name="targetCellID"></param>
+        /// <returns>Gets parent cell.</returns>
         private CellNode _searchRecursive(CellNode currNode, string targetCellID){
 
             for (int i = 0; i < currNode.Nodes.Length; i++)
             {
                 
-                if(currNode.Nodes[i] != null && currNode.Nodes[i]?.NextNode.Stats.ID != targetCellID){
+                if(currNode.Stats.ID != targetCellID){
 
-                    _searchRecursive(currNode.Nodes[i]?.NextNode, targetCellID);
+                    if(currNode.Nodes[i]?.NextNode != null){
+
+                        return _searchRecursive(currNode.Nodes[i]?.NextNode, targetCellID);
+                        
+                    }
 
                 }
                 else{
-
-                    return currNode.Nodes[i]?.NextNode;
+                    
+                    return currNode;
 
                 }
 
             }
 
-            new ArgumentNullException("currNode", "Couldnt find the target Cell!");
-            return null; //normally it shouldnt be null.
+            return null;
 
         }
 
     }
 
+    /// <summary>
+    /// Used in only CellNetwork.
+    /// </summary>
     public class CellNode{
 
         public Bound?[] Nodes = new Bound?[3]; // based on ternary tree
@@ -65,7 +107,13 @@ namespace Network
 
         }
 
-        public void Add(CellStats cellToBeBoundStat, GameObject CellGO, float boundLength){
+        /// <summary>
+        /// Creates cell and bound and adds them to parent nodes.
+        /// </summary>
+        /// <param name="cellToBeBoundStat"></param>
+        /// <param name="CellGO"></param>
+        /// <param name="boundLength"></param>
+        public bool Add(CellStats cellToBeBoundStat, GameObject CellGO, float boundLength){
 
             int unOccipiedIndex = GetNearestEmptyIndex();
 
@@ -83,10 +131,31 @@ namespace Network
 
                 Nodes[unOccipiedIndex] = bound;
 
+                return true;
+
             }
 
+            return false;
             
-            
+        }
+
+        //We will make the remove operation from parent cell and remove the taret child cell.
+        public void Remove(string id){ 
+
+           for (int i = 0; i < Nodes.Length; i++)
+            {
+                
+                if(Nodes[i]?.NextNode.Stats.ID == id){
+
+                    Nodes[i] = null;
+                    return;
+
+                }
+
+            }
+
+            new Exception("Couldnt delete the cell. Mismatched id");
+
         }
 
         /// <summary>

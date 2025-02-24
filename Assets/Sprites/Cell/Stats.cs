@@ -1,6 +1,13 @@
 using System;
 using UnityEngine;
 
+public class PlayerStats{
+
+    public Vector2 TotalForcePenalty;
+    public float TotalSpeedPenalty;
+
+}
+
 public class CellStats
 {
     public string ID; //GUID
