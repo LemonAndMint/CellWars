@@ -54,7 +54,7 @@ namespace Utils.Direction
             switch (direction)
             {
                 case Direction.Forward:
-                    return transform.forward;
+                    return transform.up;
                 case Direction.Left:
                     new NotImplementedException();
                     break;
@@ -74,6 +74,21 @@ namespace Utils.Direction
             }
 
             return Vector2.zero;
+
+        }
+
+        public static Vector2 TransformDirectionsToVector2(Transform transform, List<Direction> directions){
+
+            Vector2 tempVector = Vector2.zero;
+
+            foreach (Direction direction in directions)
+            {
+
+                tempVector += TransformDirectionToVector2(transform, direction);
+
+            }
+
+            return tempVector;
 
         }
 

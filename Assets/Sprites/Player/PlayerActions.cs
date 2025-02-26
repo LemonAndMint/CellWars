@@ -11,10 +11,12 @@ namespace Player
     {
         public PlayerInput playerInput;
         public PlayerMovement playerMovement;
+        public PlayerStats PlayerCellStats; 
         public GameObject playerGO;
-        public CellNetwork<PlayerNode, PlayerStats> playerCellNetwork;
 
-        public PlayerStats _cellStats; //FOR TESTING PURPOSES. WILL BE DELETED
+        public GameObject BoundPrefb;
+
+        public CellNetwork<PlayerNode, PlayerStats> playerCellNetwork;
 
         void Start()
         {
@@ -24,10 +26,10 @@ namespace Player
                 
                 playerInput.OnKeyInput += Move;
                 playerInput.OnMouseInput += playerMovement.Rotate;
+                playerInput.OnBindInput += Bound;
 
-                playerCellNetwork = CellNetworkCreater.CreateNetwork(new PlayerStats(), playerGO);
+                playerCellNetwork = CellNetworkCreater.CreateNetwork(PlayerCellStats, playerGO);
 
-                _cellStats = playerCellNetwork.MainCellNode.Stats;
 
             }
             catch (System.Exception e)
@@ -39,13 +41,13 @@ namespace Player
 
         public void Move(List<Direction> directions){
 
-            playerMovement.Move(directions, _cellStats.MoveSpeed);
+            playerMovement.Move(directions, PlayerCellStats.MoveSpeed);
 
         }
 
-        public void Bound(){
+        public void Bound(CellStats stats){
 
-
+            //when added bounded cell rigidbody needs to be eliminated.
 
         }
 

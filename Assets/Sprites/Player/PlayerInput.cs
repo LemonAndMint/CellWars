@@ -10,12 +10,13 @@ namespace Player
     {
         public delegate void KeyboardEvent(List<Direction> directions);
         public delegate void MouseEvent(Vector3 mousePos);
-        public delegate void MouseButtonEvent();
+        public delegate void MouseBindButtonEvent(CellStats stats);
+        public delegate void MouseUnbindButtonEvent();
 
         public event KeyboardEvent OnKeyInput;
         public event MouseEvent OnMouseInput;
-        public event MouseButtonEvent OnBindInput;
-        public event MouseButtonEvent OnUnbindInput;
+        public event MouseBindButtonEvent OnBindInput;
+        public event MouseUnbindButtonEvent OnUnbindInput;
 
 
 
@@ -69,7 +70,7 @@ namespace Player
 
             if(Input.GetKeyDown(KeyCode.Mouse0)){
 
-                OnBindInput?.Invoke();
+                OnBindInput?.Invoke(GetStats());
 
             }
 
@@ -78,6 +79,27 @@ namespace Player
                 OnUnbindInput?.Invoke();
 
             }
+
+        }
+
+        public CellStats GetStats(){
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 100))
+            {
+                CellStats stats = null;
+
+                if(hit.transform != null && hit.transform.gameObject.TryGetComponent(out stats)){
+
+                    return stats;
+
+                }
+
+            }
+
+            return null;
 
         }
 

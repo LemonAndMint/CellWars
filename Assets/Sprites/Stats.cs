@@ -1,15 +1,17 @@
 using System;
 using UnityEngine;
 
-public class Stats{
+public class Stats : MonoBehaviour
+{
 
-    public string ID; //GUID
+    private string _id;
+    public string ID{ get => _id; } //GUID
     public float Mass; //Different from rigidbody mass.
     public float MoveSpeed;
 
-     public Stats(){
+    private void _init(){
 
-        ID = Guid.NewGuid().ToString();
+        _id = Guid.NewGuid().ToString();
 
         //Generate random Mass, MoveSpeed and MoveVector for the object.
 
@@ -17,28 +19,7 @@ public class Stats{
 
 }
 
-public class CellStats : Stats
-{
-    public Vector3 MoveVector;
 
-    public CellStats() : base(){
-
-
-    }
-
-}
-
-public class PlayerStats : Stats{
-
-    public Vector2 TotalForcePenalty;
-    public float TotalSpeedPenalty;
-
-    public PlayerStats() : base(){
-
-
-    }
-
-}
 
 public class BoundStats
 {

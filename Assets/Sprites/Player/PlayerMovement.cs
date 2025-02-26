@@ -5,8 +5,9 @@ using Utils.Direction;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Transform targetTransform;
     public Rigidbody2D targetRB;
+    public float ForceMultiplier;
+    private Transform targetTransform;
 
     private void Start(){
         
@@ -24,9 +25,9 @@ public class PlayerMovement : MonoBehaviour
     
     public void Move(List<Direction> directions, float speed){
 
-        Vector2 moveVector = DirectionConverter.DirectionsToVector2(directions);
+        Vector2 moveVector = DirectionConverter.TransformDirectionsToVector2(targetTransform, directions);
 
-        targetRB.MovePosition(moveVector * Time.deltaTime * speed);
+        targetRB.AddForce(moveVector.normalized * Time.deltaTime * speed * ForceMultiplier);
         
     }
 
