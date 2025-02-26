@@ -10,7 +10,7 @@ namespace Player
     {
         public delegate void KeyboardEvent(List<Direction> directions);
         public delegate void MouseEvent(Vector3 mousePos);
-        public delegate void MouseBindButtonEvent(CellStats stats);
+        public delegate void MouseBindButtonEvent(GameObject go);
         public delegate void MouseUnbindButtonEvent();
 
         public event KeyboardEvent OnKeyInput;
@@ -82,7 +82,7 @@ namespace Player
 
         }
 
-        public CellStats GetStats(){
+        public GameObject GetStats(){
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -93,7 +93,7 @@ namespace Player
 
                 if(hit.transform != null && hit.transform.gameObject.TryGetComponent(out stats)){
 
-                    return stats;
+                    return hit.transform.gameObject;
 
                 }
 

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Network;
-using Player;
 using UnityEngine;
 using Utils.Direction;
 
@@ -12,9 +11,12 @@ namespace Player
         public PlayerInput playerInput;
         public PlayerMovement playerMovement;
         public PlayerStats PlayerCellStats; 
+        public BoundManager boundManager;
+        public Transform connectionTrans;
         public GameObject playerGO;
 
-        public GameObject BoundPrefb;
+        public GameObject testgo;
+
 
         public CellNetwork<PlayerNode, PlayerStats> playerCellNetwork;
 
@@ -37,6 +39,8 @@ namespace Player
                 Debug.LogError(e.Data);
             }
 
+            Bound(testgo);
+
         }
 
         public void Move(List<Direction> directions){
@@ -45,9 +49,9 @@ namespace Player
 
         }
 
-        public void Bound(CellStats stats){
+        public void Bound(GameObject goToBeBound){
 
-            //when added bounded cell rigidbody needs to be eliminated.
+            boundManager.Bound(connectionTrans, goToBeBound.transform);
 
         }
 
