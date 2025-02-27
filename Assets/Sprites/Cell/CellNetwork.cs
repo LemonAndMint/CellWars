@@ -1,4 +1,5 @@
 using System;
+using Network;
 using UnityEngine;
 
 namespace Network
@@ -10,28 +11,48 @@ namespace Network
         private T _mainCellNode;
         public T MainCellNode{ get => _mainCellNode; }
 
+        private float _maxAllowedBoundLength;
+
         public delegate T NodeFactory(U cellStats, GameObject cellGO);
 
         /// <summary>
         /// Unless you know what you are doing, dont use this. Im telling you future me XOXO.
         /// </summary>
-        public CellNetwork(U cellStats, GameObject CellGO, NodeFactory factory){
+        public CellNetwork(U cellStats, GameObject CellGO, float maxAllowedBoundLength, NodeFactory factory){
 
             _mainCellNode = factory(cellStats, CellGO);
+            _maxAllowedBoundLength = maxAllowedBoundLength;
 
         }
 
         //We will add the "cells" based on which cell bounded them. Player cells cannot be added
         //another systems so we are using directly CellStats.
-        public void Add(string parentCellID, CellStats cellToBeBoundStat, GameObject CellGO, float boundLength){
+        public void Add(string parentCellID, CellStats cellToBeBoundStat, GameObject CellGO){
 
             Node? parentCellNode = _searchRecursive(_mainCellNode, parentCellID);
 
             if(parentCellNode != null){
 
-                parentCellNode.Add(cellToBeBoundStat, CellGO, boundLength);
+                parentCellNode.Add(cellToBeBoundStat, CellGO);
 
             }
+
+        }
+
+        public GameObject Add(CellStats cellToBeBoundStat, GameObject CellGO){
+
+            float closestDistance = _maxAllowedBoundLength; //dont pass the raw variable for the ref argument.
+
+            Node? parentCellNode = _searchNearestRecursive(MainCellNode, CellGO.transform.position, ref closestDistance);
+
+            if(parentCellNode != null){
+
+                parentCellNode.Add(cellToBeBoundStat, CellGO);
+                return parentCellNode.CellGO;
+
+            }
+
+            return null;
 
         }
 
@@ -47,21 +68,76 @@ namespace Network
 
         }
 
-        public void Display(Node currNode, ref string displayString){
+        public string DisplayAll(){
 
+            string displayString = "";
+            int level = -1;
+
+            Display(MainCellNode, ref displayString, ref level);
+
+            return displayString;
+
+        }
+
+        public void Display(Node currNode, ref string displayString, ref int level){
+
+            level += 1;
+            for (int i = 0; i < currNode.Nodes.Length; i++)
+            {
+                
+                if(currNode.Nodes[i]?.NextNode != null){
+
+                    Display(currNode.Nodes[i]?.NextNode, ref displayString, ref level);
+
+                }
+
+            }
+
+            displayString+= currNode.CellGO.name + "  " + level +"-";
+
+        }
+
+        /// <summary>
+        /// Needs to start at max allowed distance of bound.
+        /// </summary>
+        private Node _searchNearestRecursive(Node currNode, Vector2 targetPoint, ref float closestDistance){
+
+            float distance = Vector2.Distance(currNode.CellGO.transform.position, targetPoint);
+                
+            if(distance <= closestDistance){
+
+                if(currNode.GetNearestEmptyIndex() == -1){ //near to parent but no room to add, maybe child has closer distance?
+
+                    closestDistance = distance;
+
+                }
+                else{
+
+                    return currNode; // may add from here.
+
+                }
+
+
+            }
 
             for (int i = 0; i < currNode.Nodes.Length; i++)
             {
                 
                 if(currNode.Nodes[i]?.NextNode != null){
 
-                    Display(currNode.Nodes[i]?.NextNode, ref displayString);
+                    Node node = _searchNearestRecursive(currNode.Nodes[i]?.NextNode, targetPoint, ref closestDistance);
 
+                    if(node != null){
+
+                        return node; // which is currNode from prev recursion.
+
+                    }
+                    
                 }
 
             }
 
-            displayString+= currNode.CellGO.name +  "-";
+            return null;
 
         }
 
@@ -100,11 +176,12 @@ namespace Network
 
         /// <summary>
         /// Use for Player main networks.
-        public static CellNetwork<PlayerNode, PlayerStats> CreateNetwork(PlayerStats cellStats, GameObject cellGO){
+        public static CellNetwork<PlayerNode, PlayerStats> CreateNetwork(PlayerStats cellStats, GameObject cellGO, float maxAllowedBoundLength){
 
             CellNetwork<PlayerNode, PlayerStats> network = new CellNetwork<PlayerNode, PlayerStats>(
                 cellStats, 
                 cellGO, 
+                maxAllowedBoundLength,
                 (s, go) => new PlayerNode(s, go)
             );
 
@@ -112,11 +189,12 @@ namespace Network
 
         }
 
-        public static CellNetwork<CellNode, CellStats> CreateNetwork(CellStats cellStats, GameObject cellGO){
+        public static CellNetwork<CellNode, CellStats> CreateNetwork(CellStats cellStats, GameObject cellGO, float maxAllowedBoundLength){
 
             CellNetwork<CellNode, CellStats> network = new CellNetwork<CellNode, CellStats>(
                 cellStats, 
                 cellGO, 
+                maxAllowedBoundLength,
                 (s, go) => new CellNode(s, go)
             );
 
@@ -145,14 +223,14 @@ namespace Network
         /// <summary>
         /// Creates cell and bound and adds them to parent nodes.
         /// </summary>
-        public bool Add(CellStats cellToBeBoundStat, GameObject CellGO, float boundLength){
+        public bool Add(CellStats cellToBeBoundStat, GameObject CellGO){
 
             int unOccipiedIndex = GetNearestEmptyIndex();
 
             if(unOccipiedIndex != -1){
 
                 CellNode boundedCell = new CellNode(cellToBeBoundStat, CellGO);
-                BoundStats boundStats = new BoundStats(boundLength);
+                BoundStats boundStats = new BoundStats();
 
                 Bound bound = new Bound { 
 

@@ -35,7 +35,7 @@ namespace Tests
             float randomBoundLength = -1f;
 
             CellStats stats = new CellStats();
-            cellNetwork = CellNetworkCreater.CreateNetwork(stats, cells.First());
+            cellNetwork = CellNetworkCreater.CreateNetwork(stats, cells.First(), 10f);
 
             
 
@@ -51,7 +51,7 @@ namespace Tests
                 stats = new CellStats();
                 cellStats.Add(stats);
                 
-                cellNetwork.Add(cellStats[i - 1].ID, stats, cells[i], randomBoundLength);
+                cellNetwork.Add(cellStats[i - 1].ID, stats, cells[i]);
 
                 add += cells[i].name + "++";
             
@@ -59,7 +59,7 @@ namespace Tests
 
             string add2 = "**";
 
-            cellNetwork.Display(cellNetwork.MainCellNode, ref add2);
+            add2 = cellNetwork.DisplayAll();
 
             Debug.Log(add);
             Debug.Log("//////");
@@ -80,7 +80,7 @@ namespace Tests
             float randomBoundLength = -1f;
 
             CellStats stats = new CellStats();
-            cellNetwork = CellNetworkCreater.CreateNetwork(stats, cells.First());
+            cellNetwork = CellNetworkCreater.CreateNetwork(stats, cells.First(), 10f);
 
             cellStats.Add(stats);
 
@@ -96,7 +96,7 @@ namespace Tests
 
                 int randomIndex = UnityEngine.Random.Range(0, cellStats.Count);
                 
-                cellNetwork.Add(cellStats[randomIndex].ID, stats, cells[i], randomBoundLength);
+                cellNetwork.Add(cellStats[randomIndex].ID, stats, cells[i]);
 
                 add += cells[i].name + "++";
             
@@ -104,7 +104,7 @@ namespace Tests
 
             string add2 = "**";
 
-            cellNetwork.Display(cellNetwork.MainCellNode, ref add2);
+            add2 = cellNetwork.DisplayAll();
 
             Debug.Log(add);
             Debug.Log("//////");

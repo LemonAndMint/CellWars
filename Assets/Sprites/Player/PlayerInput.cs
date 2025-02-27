@@ -70,7 +70,14 @@ namespace Player
 
             if(Input.GetKeyDown(KeyCode.Mouse0)){
 
-                OnBindInput?.Invoke(GetStats());
+                GameObject targetGO = GetGO();
+
+                if(targetGO != null){
+
+                    OnBindInput?.Invoke(targetGO);
+
+                }
+
 
             }
 
@@ -82,16 +89,15 @@ namespace Player
 
         }
 
-        public GameObject GetStats(){
+        public GameObject GetGO(){
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            //IN ORDER IT TO WORK OPEN THE RIGIDBODY SIMULATION OR ADD RIGIDBODY!
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
 
-            if (Physics.Raycast(ray, out hit, 100))
+            if (hit.collider != null)
             {
-                CellStats stats = null;
 
-                if(hit.transform != null && hit.transform.gameObject.TryGetComponent(out stats)){
+                if(hit.transform != null && hit.transform.gameObject.TryGetComponent(out CellStats stats)){
 
                     return hit.transform.gameObject;
 
@@ -100,7 +106,6 @@ namespace Player
             }
 
             return null;
-
         }
 
     }
