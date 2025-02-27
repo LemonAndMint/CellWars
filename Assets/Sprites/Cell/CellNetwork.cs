@@ -100,6 +100,7 @@ namespace Network
         /// <summary>
         /// Needs to start at max allowed distance of bound.
         /// </summary>
+        /// /// <returns>Gets parent cell.</returns>
         private Node _searchNearestRecursive(Node currNode, Vector2 targetPoint, ref float closestDistance){
 
             float distance = Vector2.Distance(currNode.CellGO.transform.position, targetPoint);
@@ -113,7 +114,7 @@ namespace Network
                 }
                 else{
 
-                    return currNode; // may add from here.
+                    return currNode; // may "add" from here.
 
                 }
 
@@ -152,7 +153,13 @@ namespace Network
 
                     if(currNode.Nodes[i]?.NextNode != null){
 
-                        return _searchRecursive(currNode.Nodes[i]?.NextNode, targetCellID);
+                        Node node = _searchRecursive(currNode.Nodes[i]?.NextNode, targetCellID);
+
+                        if(node != null){// which is currNode from prev recursion.
+
+                            return node;
+
+                        }
                         
                     }
 
