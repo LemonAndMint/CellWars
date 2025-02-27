@@ -6,7 +6,7 @@ namespace Network
 {
     public class CellNetwork<T, U> where T : Node 
     {
-        //Main cell could be player or a bot. If its player, it will have PlayerStats,
+        //Main cell could be a player or a bot. If its player, it will have PlayerStats,
         //if not it will have CellStats.
         private T _mainCellNode;
         public T MainCellNode{ get => _mainCellNode; }
@@ -17,6 +17,7 @@ namespace Network
 
         /// <summary>
         /// Unless you know what you are doing, dont use this. Im telling you future me XOXO.
+        /// Use "CellNetworkCreater" functions.
         /// </summary>
         public CellNetwork(U cellStats, GameObject CellGO, float maxAllowedBoundLength, NodeFactory factory){
 
@@ -26,7 +27,7 @@ namespace Network
         }
 
         //We will add the "cells" based on which cell bounded them. Player cells cannot be added
-        //another systems so we are using directly CellStats.
+        //to another systems so we are directly using CellStats.
         public void Add(string parentCellID, CellStats cellToBeBoundStat, GameObject CellGO){
 
             Node? parentCellNode = _searchRecursive(_mainCellNode, parentCellID);
@@ -100,7 +101,7 @@ namespace Network
         /// <summary>
         /// Needs to start at max allowed distance of bound.
         /// </summary>
-        /// /// <returns>Gets parent cell.</returns>
+        /// <returns>Gets parent cell.</returns>
         private Node _searchNearestRecursive(Node currNode, Vector2 targetPoint, ref float closestDistance){
 
             float distance = Vector2.Distance(currNode.CellGO.transform.position, targetPoint);
@@ -181,8 +182,6 @@ namespace Network
     public static class CellNetworkCreater
     {
 
-        /// <summary>
-        /// Use for Player main networks.
         public static CellNetwork<PlayerNode, PlayerStats> CreateNetwork(PlayerStats cellStats, GameObject cellGO, float maxAllowedBoundLength){
 
             CellNetwork<PlayerNode, PlayerStats> network = new CellNetwork<PlayerNode, PlayerStats>(
