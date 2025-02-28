@@ -44,7 +44,7 @@ namespace Network
 
             float closestDistance = _maxAllowedBoundLength; //dont pass the raw variable for the ref argument.
 
-            Node? parentCellNode = _searchNearestRecursive(MainCellNode, CellGO.transform.position, ref closestDistance);
+            Node? parentCellNode = _searchNearestRecursive(MainCellNode, CellGO.transform.position);
 
             if(parentCellNode != null){
 
@@ -102,23 +102,15 @@ namespace Network
         /// Needs to start at max allowed distance of bound.
         /// </summary>
         /// <returns>Gets parent cell.</returns>
-        private Node _searchNearestRecursive(Node currNode, Vector2 targetPoint, ref float closestDistance){
+        private Node _searchNearestRecursive(Node currNode, Vector2 targetPoint){
+            
+            //Not the perfect version of adding nodes but in this stage im not going to try perfecting it.
 
             float distance = Vector2.Distance(currNode.CellGO.transform.position, targetPoint);
                 
-            if(distance <= closestDistance){
+            if(distance <= _maxAllowedBoundLength && currNode.GetNearestEmptyIndex() != -1){
 
-                if(currNode.GetNearestEmptyIndex() == -1){ //near to parent but no room to add, maybe child has closer distance?
-
-                    closestDistance = distance;
-
-                }
-                else{
-
-                    return currNode; // may "add" from here.
-
-                }
-
+                return currNode; // may "add" from here.
 
             }
 
@@ -127,7 +119,7 @@ namespace Network
                 
                 if(currNode.Nodes[i]?.NextNode != null){
 
-                    Node node = _searchNearestRecursive(currNode.Nodes[i]?.NextNode, targetPoint, ref closestDistance);
+                    Node node = _searchNearestRecursive(currNode.Nodes[i]?.NextNode, targetPoint);
 
                     if(node != null){
 
