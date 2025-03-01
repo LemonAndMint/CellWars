@@ -1,10 +1,11 @@
+using Network;
 using UnityEngine;
 
 public class BoundManager : MonoBehaviour
 {
     public GameObject BoundPrefb;
 
-    public void Bound(Transform bindtransform, Transform toBeBoundtransform){
+    public GameObject Bound(Transform bindtransform, Transform toBeBoundtransform){ //RETURN BOND MAKE THE BOUND IN HERE!
 
         Vector3 distanceVector = bindtransform.parent.position + toBeBoundtransform.position;
         float distance = Vector2.Distance(bindtransform.parent.position, toBeBoundtransform.localPosition);
@@ -23,11 +24,20 @@ public class BoundManager : MonoBehaviour
 
         if(toBeBoundtransform.TryGetComponent(out Rigidbody2D rigidbody2D)){
 
-            rigidbody2D.simulated = false; 
-            //in order it to move with main cell, rigidbody needs to stop for the other cells.
+            rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+            //in order it to move with main cell, rigidbody needs to be kinematic.
             //opposite force will applied through predefined variables.
 
         }
+
+        return boundGO;
+
+    }
+
+    public void Unbound(Bound? bound){
+
+        (bound?.NextNode).CellGO.transform.parent = null;
+        Transform.Destroy(bound?.BoundGO);
 
     }
     

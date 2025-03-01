@@ -6,7 +6,8 @@ using Utils.Direction;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D targetRB;
-    public float ForceMultiplier;
+    public float forceMultiplier;
+    public float spinSpeed;
     private Transform targetTransform;
 
     private void Start(){
@@ -27,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 moveVector = DirectionConverter.TransformDirectionsToVector2(targetTransform, directions);
 
-        targetRB.AddForce(moveVector.normalized * Time.deltaTime * speed * ForceMultiplier);
+        targetRB.AddForce(moveVector.normalized * Time.deltaTime * speed * forceMultiplier);
         
     }
 
@@ -42,7 +43,10 @@ public class PlayerMovement : MonoBehaviour
         mouse_pos.x = mouse_pos.x - object_pos.x;
         mouse_pos.y = mouse_pos.y - object_pos.y;
         float angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg - 90;
-        targetTransform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        //angle = Mathf.Clamp(targetTransform.rotation.z, angle, spinSpeed);
+        //targetTransform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        targetRB.MoveRotation(angle);
 
     }
     

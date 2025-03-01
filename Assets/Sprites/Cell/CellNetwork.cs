@@ -1,5 +1,6 @@
 using System;
 using Network;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Network
@@ -12,6 +13,7 @@ namespace Network
         public T MainCellNode{ get => _mainCellNode; }
 
         private float _maxAllowedBoundLength;
+        private BoundManager _boundManager;
 
         public delegate T NodeFactory(U cellStats, GameObject cellGO);
 
@@ -19,36 +21,36 @@ namespace Network
         /// Unless you know what you are doing, dont use this. Im telling you future me XOXO.
         /// Use "CellNetworkCreater" functions.
         /// </summary>
-        public CellNetwork(U cellStats, GameObject CellGO, float maxAllowedBoundLength, NodeFactory factory){
+        public CellNetwork(U cellStats, GameObject CellGO, float maxAllowedBoundLength, BoundManager boundManager, NodeFactory factory){
 
             _mainCellNode = factory(cellStats, CellGO);
             _maxAllowedBoundLength = maxAllowedBoundLength;
+            _boundManager = boundManager;
 
         }
 
-        //We will add the "cells" based on which cell bounded them. Player cells cannot be added
+        /*//We will add the "cells" based on which cell bounded them. Player cells cannot be added
         //to another systems so we are directly using CellStats.
-        public void Add(string parentCellID, CellStats cellToBeBoundStat, GameObject CellGO){
+        //OBSOLUTE!
+        public void Add(GameObject parentCellGO, CellStats cellToBeBoundStat, GameObject CellGO){
 
             Node? parentCellNode = _searchRecursive(_mainCellNode, parentCellID);
 
             if(parentCellNode != null){
 
-                parentCellNode.Add(cellToBeBoundStat, CellGO);
+                parentCellNode.Add(cellToBeBoundStat, CellGO, _boundManager.Bound);
 
             }
 
-        }
+        }*/
 
         public GameObject Add(CellStats cellToBeBoundStat, GameObject CellGO){
-
-            float closestDistance = _maxAllowedBoundLength; //dont pass the raw variable for the ref argument.
 
             Node? parentCellNode = _searchNearestRecursive(MainCellNode, CellGO.transform.position);
 
             if(parentCellNode != null){
 
-                parentCellNode.Add(cellToBeBoundStat, CellGO);
+                parentCellNode.Add(cellToBeBoundStat, CellGO, _boundManager.Bound);
                 return parentCellNode.CellGO;
 
             }
@@ -57,15 +59,18 @@ namespace Network
 
         }
 
-        public void Remove(string taretCellID){
+        public bool Remove(GameObject goToBeUnbound){
 
-            Node? parentCellNode = _searchRecursive(_mainCellNode, taretCellID);
+            Node? parentCellNode = _searchRecursive(_mainCellNode, goToBeUnbound);
 
             if(parentCellNode != null){
 
-                parentCellNode.Remove(taretCellID);
+                parentCellNode.Remove(goToBeUnbound, _boundManager.Unbound);
+                return true;
 
             }
+
+            return false;
 
         }
 
@@ -137,16 +142,16 @@ namespace Network
 
 
         /// <returns>Gets parent cell.</returns>
-        private Node _searchRecursive(Node currNode, string targetCellID){
+        private Node _searchRecursive(Node currNode, GameObject goToBeUnbound){
 
             for (int i = 0; i < currNode.Nodes.Length; i++)
             {
                 
-                if(currNode.Stats.ID != targetCellID){
+                if(currNode.Nodes[i]?.NextNode.CellGO != goToBeUnbound){
 
                     if(currNode.Nodes[i]?.NextNode != null){
 
-                        Node node = _searchRecursive(currNode.Nodes[i]?.NextNode, targetCellID);
+                        Node node = _searchRecursive(currNode.Nodes[i]?.NextNode, goToBeUnbound);
 
                         if(node != null){// which is currNode from prev recursion.
 
@@ -174,12 +179,13 @@ namespace Network
     public static class CellNetworkCreater
     {
 
-        public static CellNetwork<PlayerNode, PlayerStats> CreateNetwork(PlayerStats cellStats, GameObject cellGO, float maxAllowedBoundLength){
+        public static CellNetwork<PlayerNode, PlayerStats> CreateNetwork(PlayerStats cellStats, GameObject cellGO, float maxAllowedBoundLength, BoundManager boundManager){
 
             CellNetwork<PlayerNode, PlayerStats> network = new CellNetwork<PlayerNode, PlayerStats>(
                 cellStats, 
                 cellGO, 
                 maxAllowedBoundLength,
+                boundManager,
                 (s, go) => new PlayerNode(s, go)
             );
 
@@ -187,12 +193,13 @@ namespace Network
 
         }
 
-        public static CellNetwork<CellNode, CellStats> CreateNetwork(CellStats cellStats, GameObject cellGO, float maxAllowedBoundLength){
+        public static CellNetwork<CellNode, CellStats> CreateNetwork(CellStats cellStats, GameObject cellGO, float maxAllowedBoundLength, BoundManager boundManager){
 
             CellNetwork<CellNode, CellStats> network = new CellNetwork<CellNode, CellStats>(
                 cellStats, 
                 cellGO, 
                 maxAllowedBoundLength,
+                boundManager,
                 (s, go) => new CellNode(s, go)
             );
 
@@ -213,7 +220,6 @@ namespace Network
 
         public Node(GameObject CellGO){
 
-            
             this.CellGO = CellGO;
 
         }
@@ -221,19 +227,21 @@ namespace Network
         /// <summary>
         /// Creates cell and bound and adds them to parent nodes.
         /// </summary>
-        public bool Add(CellStats cellToBeBoundStat, GameObject CellGO){
+        public bool Add(CellStats cellToBeBoundStat, GameObject toBeBoundedCellGO, Func<Transform,Transform,GameObject> boundFunc){
 
             int unOccipiedIndex = GetNearestEmptyIndex();
 
             if(unOccipiedIndex != -1){
 
-                CellNode boundedCell = new CellNode(cellToBeBoundStat, CellGO);
-                BoundStats boundStats = new BoundStats();
+                CellNode boundedCell = new CellNode(cellToBeBoundStat, toBeBoundedCellGO);
+                
+                GameObject boundGO = boundFunc?.Invoke(CellGO.transform.GetChild(0), //we assume that this is the connection gameobject.
+                                                       toBeBoundedCellGO.transform);
 
                 Bound bound = new Bound { 
 
                     NextNode = boundedCell,
-                    BoundStats = boundStats
+                    BoundGO = boundGO
 
                 };
 
@@ -248,13 +256,14 @@ namespace Network
         }
 
         //We will make the remove operation from parent cell and remove the taret child cell.
-        public void Remove(string id){ 
+        public void Remove(GameObject goToBeUnbound, Action<Bound?> unboundFunc){ 
 
            for (int i = 0; i < Nodes.Length; i++)
             {
                 
-                if(Nodes[i]?.NextNode.Stats.ID == id){
+                if(Nodes[i]?.NextNode.CellGO == goToBeUnbound){
 
+                    unboundFunc?.Invoke(Nodes[i]);
                     Nodes[i] = null;
                     return;
 
@@ -313,7 +322,7 @@ namespace Network
     public struct Bound{
 
         public CellNode NextNode;
-        public BoundStats BoundStats;
+        public GameObject BoundGO;
 
     }
 

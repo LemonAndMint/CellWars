@@ -18,18 +18,3 @@ public class Stats : MonoBehaviour
     }
 
 }
-
-
-
-public class BoundStats
-{
-    public float MaxBreakingForce;
-
-    public BoundStats(){
-
-        //Generate random MaxBreakingForce for the bound and according to that change the sprite ccolor.
-        //Length will be based on actual bond length so it wont be random.
-
-    }
-
-}

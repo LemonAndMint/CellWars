@@ -30,10 +30,11 @@ namespace Player
                 _initComponents();
                 
                 playerInput.OnKeyInput += Move;
-                //playerInput.OnMouseInput += playerMovement.Rotate; //dont rotate the object with mouse.
+                playerInput.OnMouseInput += playerMovement.Rotate; 
                 playerInput.OnBindInput += Bound;
+                playerInput.OnUnbindInput += Unbound;
 
-                playerCellNetwork = CellNetworkCreater.CreateNetwork(playerCellStats, playerGO, MaximumAllowedBoundLength);
+                playerCellNetwork = CellNetworkCreater.CreateNetwork(playerCellStats, playerGO, MaximumAllowedBoundLength, boundManager);
 
 
             }
@@ -42,7 +43,6 @@ namespace Player
                 Debug.LogError(e.Data);
             }
 
-            //Bound(testgo);
 
         }
 
@@ -62,10 +62,21 @@ namespace Player
 
                 if(nearestCellGO != null){
                     
-                    Transform connectionTrans = nearestCellGO.transform.GetChild(0); //we assume that this is the connection gameobject.
-                    boundManager.Bound(connectionTrans, goToBeBound.transform);
+                    playerCellStats.AddPenalty(stats.MoveVector, stats.MoveSpeed);
 
-                    Debug.Log(playerCellNetwork.DisplayAll());
+                }
+
+            }
+
+        }
+
+        public void Unbound(GameObject goToBeUnbound){
+
+            if(goToBeUnbound.TryGetComponent(out CellStats stats)){
+
+                if(playerCellNetwork.Remove(goToBeUnbound)){
+
+                    playerCellStats.RemovePenalty(stats.MoveVector, stats.MoveSpeed);
 
                 }
 

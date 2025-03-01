@@ -10,13 +10,12 @@ namespace Player
     {
         public delegate void KeyboardEvent(List<Direction> directions);
         public delegate void MouseEvent(Vector3 mousePos);
-        public delegate void MouseBindButtonEvent(GameObject go);
-        public delegate void MouseUnbindButtonEvent();
+        public delegate void MouseButtonEvent(GameObject go);
 
         public event KeyboardEvent OnKeyInput;
         public event MouseEvent OnMouseInput;
-        public event MouseBindButtonEvent OnBindInput;
-        public event MouseUnbindButtonEvent OnUnbindInput;
+        public event MouseButtonEvent OnBindInput;
+        public event MouseButtonEvent OnUnbindInput;
 
 
 
@@ -83,7 +82,9 @@ namespace Player
 
             if(Input.GetKeyDown(KeyCode.Mouse1)){
 
-                OnUnbindInput?.Invoke();
+                GameObject targetGO = GetGO();
+
+                OnUnbindInput?.Invoke(targetGO);
 
             }
 
@@ -92,7 +93,7 @@ namespace Player
         public GameObject GetGO(){
 
             //IN ORDER IT TO WORK OPEN THE RIGIDBODY SIMULATION OR ADD RIGIDBODY!
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); //ADD LAYER MASK FOR EASY COMPUTATION FOR NETWORK!
 
             if (hit.collider != null)
             {
