@@ -47,22 +47,31 @@ public class PlayerMovement : MonoBehaviour
         Vector3 object_pos = Camera.main.WorldToScreenPoint(targetTransform.position);
         mouse_pos.x = mouse_pos.x - object_pos.x;
         mouse_pos.y = mouse_pos.y - object_pos.y;
+
         float angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg - 90;
 
         float deltaAngle = angle - prevAngle;
+        float objectRotation = targetRB.rotation % 360f;
 
         //deltaAngle = Mathf.Clamp(deltaAngle, -spinLimit, spinLimit);
         //targetTransform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        Debug.Log(angle);
+        Debug.Log(MathF.Abs(objectRotation) - MathF.Abs(angle));
 
-        /*targetRB.MoveRotation(targetRB.rotation + deltaAngle);
+        //targetRB.MoveRotation(targetRB.rotation + Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
 
-        prevAngle = angle;*/
-        targetRB.AddTorque(deltaAngle * spinSpeed * Time.deltaTime);
+        //targetRB.MoveRotation(targetRB.rotation + Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
+
+        //targetRB.MoveRotation(Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
+
+
+        if(MathF.Abs(MathF.Abs(objectRotation) - MathF.Abs(angle)) > angleThreshold){
+
+            targetRB.MoveRotation(targetRB.rotation + Mathf.Sign(objectRotation - angle) * spinSpeed * Time.deltaTime);
+
+        }
+
         prevAngle = angle;
-
-        //targetRB.angularVelocity = Mathf.Clamp(targetRB.angularVelocity, -torqueMultiplier, torqueMultiplier);
 
     }
 

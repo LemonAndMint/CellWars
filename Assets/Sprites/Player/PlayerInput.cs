@@ -22,7 +22,7 @@ namespace Player
         private List<Direction> directions = new List<Direction>();
 
 
-        void LateUpdate()
+        void FixedUpdate()
         {
             
             //KEYBOARD ++
@@ -59,13 +59,7 @@ namespace Player
             }
             //KEYBOARD --
 
-            float mouseXAxis = Input.GetAxis("Mouse X");
-
-            if(mouseXAxis != 0){
-
-                OnMouseInput?.Invoke(Input.mousePosition);
-
-            }
+            OnMouseInput?.Invoke(Input.mousePosition);
 
             if(Input.GetKeyDown(KeyCode.Mouse0)){
 

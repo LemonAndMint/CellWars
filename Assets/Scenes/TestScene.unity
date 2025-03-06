@@ -821,8 +821,8 @@ MonoBehaviour:
   targetRB: {fileID: 135800106}
   forceMultiplier: 1000
   spinLimit: 1
-  angleThreshold: 0
-  spinSpeed: 10
+  angleThreshold: 10
+  spinSpeed: 150
 --- !u!114 &852106219
 MonoBehaviour:
   m_ObjectHideFlags: 0
