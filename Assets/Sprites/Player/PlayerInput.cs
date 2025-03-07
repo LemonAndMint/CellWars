@@ -14,6 +14,7 @@ namespace Player
 
         public event KeyboardEvent OnKeyInput;
         public event MouseEvent OnMouseInput;
+
         public event MouseButtonEvent OnBindInput;
         public event MouseButtonEvent OnUnbindInput;
 
@@ -59,7 +60,14 @@ namespace Player
             }
             //KEYBOARD --
 
-            OnMouseInput?.Invoke(Input.mousePosition);
+
+            float mouseXAxis = Input.GetAxis("Mouse X");
+
+            if(mouseXAxis != 0){
+
+                OnMouseInput?.Invoke(Input.mousePosition);
+
+            }
 
             if(Input.GetKeyDown(KeyCode.Mouse0)){
 

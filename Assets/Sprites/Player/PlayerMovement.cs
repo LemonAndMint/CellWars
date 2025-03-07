@@ -7,9 +7,6 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D targetRB;
     public float forceMultiplier;
-    public float spinLimit;
-    public float angleThreshold;
-
     public float spinSpeed;
 
     private Transform targetTransform;
@@ -51,26 +48,8 @@ public class PlayerMovement : MonoBehaviour
         float angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg - 90;
 
         float deltaAngle = angle - prevAngle;
-        float objectRotation = targetRB.rotation % 360f;
-
-        //deltaAngle = Mathf.Clamp(deltaAngle, -spinLimit, spinLimit);
-        //targetTransform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
-        Debug.Log(MathF.Abs(objectRotation) - MathF.Abs(angle));
-
-        //targetRB.MoveRotation(targetRB.rotation + Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
-
-        //targetRB.MoveRotation(targetRB.rotation + Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
-
-        //targetRB.MoveRotation(Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
-
-
-        if(MathF.Abs(MathF.Abs(objectRotation) - MathF.Abs(angle)) > angleThreshold){
-
-            targetRB.MoveRotation(targetRB.rotation + Mathf.Sign(objectRotation - angle) * spinSpeed * Time.deltaTime);
-
-        }
-
+      
+        targetRB.AddTorque(Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
         prevAngle = angle;
 
     }
