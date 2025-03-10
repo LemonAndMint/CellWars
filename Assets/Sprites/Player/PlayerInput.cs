@@ -61,13 +61,18 @@ namespace Player
             //KEYBOARD --
 
 
-            float mouseXAxis = Input.GetAxis("Mouse X");
+            /*float mouseXAxis = Input.GetAxis("Mouse X");
 
             if(mouseXAxis != 0){
 
                 OnMouseInput?.Invoke(Input.mousePosition);
 
-            }
+            }*/
+
+            
+        }
+
+        void Update() {
 
             if(Input.GetKeyDown(KeyCode.Mouse0)){
 
@@ -90,6 +95,7 @@ namespace Player
 
             }
 
+            
         }
 
         public GameObject GetGO(){

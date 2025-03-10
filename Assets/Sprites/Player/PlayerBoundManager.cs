@@ -24,7 +24,7 @@ public class BoundManager : MonoBehaviour
         boundGO.transform.parent = bindtransform;
         toBeBoundtransform.parent = bindtransform;
 
-        boundGO.layer = LayerMask.NameToLayer(GameObjectLayerString);
+        toBeBoundtransform.gameObject.layer = LayerMask.NameToLayer(GameObjectLayerString);
 
         if(toBeBoundtransform.TryGetComponent(out Rigidbody2D rigidbody2D)){
 
