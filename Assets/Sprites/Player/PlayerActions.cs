@@ -72,7 +72,7 @@ namespace Player
 
         public void Unbound(GameObject goToBeUnbound){
 
-            if(goToBeUnbound.TryGetComponent(out CellStats stats)){
+            if(goToBeUnbound != null && goToBeUnbound.TryGetComponent(out CellStats stats)){
 
                 if(playerCellNetwork.Remove(goToBeUnbound)){
 

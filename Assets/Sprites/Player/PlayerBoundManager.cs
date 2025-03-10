@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BoundManager : MonoBehaviour
 {
+    public string GameObjectPlayerLayerString;
     public string GameObjectLayerString;
     public string RigidbodyExcludeLayerString;
     public GameObject BoundPrefb;
@@ -31,7 +32,7 @@ public class BoundManager : MonoBehaviour
         boundGO.transform.parent = bindtransform;
         toBeBoundtransform.parent = bindtransform;
 
-        toBeBoundtransform.gameObject.layer = LayerMask.NameToLayer(GameObjectLayerString);
+        toBeBoundtransform.gameObject.layer = LayerMask.NameToLayer(GameObjectPlayerLayerString);
 
         if(toBeBoundtransform.TryGetComponent(out Rigidbody2D rigidbody2D)){
 
@@ -70,6 +71,9 @@ public class BoundManager : MonoBehaviour
             LayerMask mask = LayerMask.GetMask(RigidbodyExcludeLayerString);
             rigidbody2D.excludeLayers &= ~mask;
             //reverse what we have done in Bound operation
+
+            //rigidbody2D.AddForce(rigidbody2D.transform.forward.normalized * 10, ForceMode2D.Impulse);
+            //#TODO
 
         }
 

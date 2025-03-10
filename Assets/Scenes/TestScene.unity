@@ -841,7 +841,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd79013a7b9b00d4084bc14e95b0d09e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameObjectLayerString: PlayerCells
+  GameObjectPlayerLayerString: PlayerCells
+  GameObjectLayerString: Cells
   RigidbodyExcludeLayerString: Bound
   BoundPrefb: {fileID: 3850968379330917531, guid: a0436fbfff59c474f9ee18449f32b4f1, type: 3}
   mainRb: {fileID: 135800106}
