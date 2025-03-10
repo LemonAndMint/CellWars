@@ -6,7 +6,14 @@ public class BoundManager : MonoBehaviour
     public string GameObjectLayerString;
     public string RigidbodyExcludeLayerString;
     public GameObject BoundPrefb;
+    public Rigidbody2D mainRb;
 
+    /// <summary>
+    /// bind trans is parent cell
+    /// </summary>
+    /// <param name="bindtransform"></param>
+    /// <param name="toBeBoundtransform"></param>
+    /// <returns></returns>
     public GameObject Bound(Transform bindtransform, Transform toBeBoundtransform){ //RETURN BOND, MAKE THE BOUND IN HERE!
 
         Vector3 distanceVector = bindtransform.parent.position + toBeBoundtransform.position;
@@ -29,11 +36,21 @@ public class BoundManager : MonoBehaviour
         if(toBeBoundtransform.TryGetComponent(out Rigidbody2D rigidbody2D)){
 
             rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+            //in order it to move with main cell, rigidbody needs to be kinematic.
+            //opposite force will applied through predefined variables.
             
             LayerMask mask = LayerMask.GetMask(RigidbodyExcludeLayerString);
             rigidbody2D.excludeLayers |= mask;
-            //in order it to move with main cell, rigidbody needs to be kinematic.
-            //opposite force will applied through predefined variables.
+
+        }
+
+        if(mainRb != null){
+            
+            //https://www.reddit.com/r/Unity3D/comments/idd0ib/do_you_know_you_can_change_a_rigidbodys_center_of/
+
+            mainRb.centerOfMass = Vector2.zero; 
+            //reset the center of mass because if we dont, torque will be applied 
+            //based on whole system's center of mass.
 
         }
 

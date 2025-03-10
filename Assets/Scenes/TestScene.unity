@@ -844,6 +844,7 @@ MonoBehaviour:
   GameObjectLayerString: PlayerCells
   RigidbodyExcludeLayerString: Bound
   BoundPrefb: {fileID: 3850968379330917531, guid: a0436fbfff59c474f9ee18449f32b4f1, type: 3}
+  mainRb: {fileID: 135800106}
 --- !u!1001 &1635268219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1156,10 +1157,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1482906479911120386, guid: 9d1adc41ae6ee304a865bd098d123f9b, type: 3}
       propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1482906479911120386, guid: 9d1adc41ae6ee304a865bd098d123f9b, type: 3}
-      propertyPath: m_LinearDamping
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1482906479911120386, guid: 9d1adc41ae6ee304a865bd098d123f9b, type: 3}
