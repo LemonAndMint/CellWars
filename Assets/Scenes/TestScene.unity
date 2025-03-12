@@ -644,6 +644,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 4767191509262453987, guid: 9d1adc41ae6ee304a865bd098d123f9b, type: 3}
+      propertyPath: MoveVector.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767191509262453987, guid: 9d1adc41ae6ee304a865bd098d123f9b, type: 3}
+      propertyPath: MoveVector.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7125683628895876299, guid: 9d1adc41ae6ee304a865bd098d123f9b, type: 3}
       propertyPath: m_Layer
       value: 7

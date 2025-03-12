@@ -72,7 +72,7 @@ public class BoundManager : MonoBehaviour
             rigidbody2D.excludeLayers &= ~mask;
             //reverse what we have done in Bound operation
 
-            //rigidbody2D.AddForce(rigidbody2D.transform.forward.normalized * 10, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(mainRb.transform.up * -10, ForceMode2D.Impulse);
             //#TODO
 
         }
