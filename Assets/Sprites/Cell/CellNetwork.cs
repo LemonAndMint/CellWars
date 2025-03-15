@@ -74,6 +74,22 @@ namespace Network
 
         }
 
+        public bool RemoveBound(GameObject boundGO){
+
+            Node? parentCellNode = _searchBoundRecursive(_mainCellNode, boundGO);
+
+            if(parentCellNode != null){
+
+                parentCellNode.Remove(boundGO, _boundManager.Unbound);
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+
         public string DisplayAll(){
 
             string displayString = "";
@@ -174,7 +190,74 @@ namespace Network
 
         }
 
+        /// <returns>Gets parent cell.</returns>
+        private Node _searchBoundRecursive(Node currNode, GameObject boundGO){
+
+            for (int i = 0; i < currNode.Nodes.Length; i++)
+            {
+                
+                if(currNode.Nodes[i]?.BoundGO != boundGO){
+
+                    if(currNode.Nodes[i]?.NextNode != null){
+
+                        Node node = _searchRecursive(currNode.Nodes[i]?.NextNode, boundGO);
+
+                        if(node != null){// which is currNode from prev recursion.
+
+                            return node;
+
+                        }
+                        
+                    }
+
+                }
+                else{
+                    
+                    return currNode;
+
+                }
+
+            }
+
+            return null;
+
+        }
+
+        /// <returns>Gets parent cell.</returns>
+        /*private Node _searchRecursive<V>(Node currNode, V objectThatChecked, Func<V, bool> boolStatement){ //#DO LATER
+
+            for (int i = 0; i < currNode.Nodes.Length; i++)
+            {
+                
+                if(boolStatement.Invoke(objectThatChecked)){
+
+                    if(currNode.Nodes[i]?.NextNode != null){
+
+                        Node node = _searchRecursive(currNode.Nodes[i]?.NextNode, objectThatChecked, boolStatement);
+
+                        if(node != null){// which is currNode from prev recursion.
+
+                            return node;
+
+                        }
+                        
+                    }
+
+                }
+                else{
+                    
+                    return currNode;
+
+                }
+
+            }
+
+            return null;
+
+        }*/
+
     }
+
 
     public static class CellNetworkCreater
     {
@@ -262,6 +345,26 @@ namespace Network
             {
                 
                 if(Nodes[i]?.NextNode.CellGO == goToBeUnbound){
+
+                    unboundFunc?.Invoke(Nodes[i]);
+                    Nodes[i] = null;
+                    return;
+
+                }
+
+            }
+
+            new Exception("Couldnt delete the cell. Mismatched id");
+
+        }
+
+        //We will make the remove operation from parent cell and remove the taret child cell.
+        public void RemoveBound(GameObject boundGO, Action<Bound?> unboundFunc){ 
+
+           for (int i = 0; i < Nodes.Length; i++)
+            {
+                
+                if(Nodes[i]?.BoundGO == boundGO){
 
                     unboundFunc?.Invoke(Nodes[i]);
                     Nodes[i] = null;

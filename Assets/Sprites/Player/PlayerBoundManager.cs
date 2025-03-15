@@ -22,6 +22,12 @@ public class BoundManager : MonoBehaviour
 
         GameObject boundGO = Instantiate(BoundPrefb, distanceVector * 0.5f, Quaternion.identity);
 
+        if(boundGO.TryGetComponent(out BoundCollisionChecker collisionChecker)){
+
+            
+
+        }
+
         boundGO.transform.localScale =  new Vector3(distance, boundGO.transform.localScale.y, boundGO.transform.localScale.z);
 
         Vector2 direction = toBeBoundtransform.position - bindtransform.parent.position;
