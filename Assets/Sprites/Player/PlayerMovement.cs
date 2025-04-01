@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D targetRB;
     public float forceMultiplier;
     public float spinSpeed;
+    public float maxAngularVelocity;
 
     private Transform targetTransform;
     private float prevAngle;
@@ -49,7 +50,11 @@ public class PlayerMovement : MonoBehaviour
 
         float deltaAngle = angle - prevAngle;
       
-        targetRB.AddTorque(Mathf.Sign(deltaAngle) * spinSpeed * Time.deltaTime);
+        targetRB.AddTorque(Mathf.Sign(deltaAngle) * spinSpeed, ForceMode2D.Impulse);
+
+        if (targetRB.angularVelocity < -maxAngularVelocity) { targetRB.angularVelocity = -maxAngularVelocity; }
+        if (targetRB.angularVelocity > maxAngularVelocity) { targetRB.angularVelocity = maxAngularVelocity; }
+
         prevAngle = angle;
 
     }

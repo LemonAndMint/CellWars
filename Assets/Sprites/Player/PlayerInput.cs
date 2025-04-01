@@ -63,7 +63,7 @@ namespace Player
 
             float mouseXAxis = Input.GetAxis("Mouse X");
 
-            if(mouseXAxis != 0){
+            if(Input.GetKeyDown(KeyCode.Space)){
 
                 OnMouseInput?.Invoke(Input.mousePosition);
 

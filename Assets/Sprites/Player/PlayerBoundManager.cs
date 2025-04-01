@@ -1,3 +1,4 @@
+using System;
 using Network;
 using UnityEngine;
 
@@ -78,12 +79,20 @@ public class BoundManager : MonoBehaviour
             rigidbody2D.excludeLayers &= ~mask;
             //reverse what we have done in Bound operation
 
-            rigidbody2D.AddForce(mainRb.transform.up * -10, ForceMode2D.Impulse);
-            //#TODO
+            rigidbody2D.AddForce(rigidbody2D.transform.up * mainRb.angularVelocity * 10, ForceMode2D.Impulse);
 
         }
 
-        Transform.Destroy(bound?.BoundGO);
+        Destroy(bound?.BoundGO);
+
+    }
+
+    private Vector2 _angleToVector( float angle ){
+
+        float realRotation = angle % 360f;
+        Vector2 direcVect = new Vector2(Mathf.Cos(realRotation), Mathf.Sin(realRotation));
+
+        return direcVect;
 
     }
     
