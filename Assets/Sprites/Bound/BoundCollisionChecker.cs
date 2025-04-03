@@ -1,28 +1,27 @@
+using System;
 using UnityEngine;
+using static BoundManager;
 
 public class BoundCollisionChecker : MonoBehaviour
 {
-    public delegate void CollisionEvent();
-    public event CollisionEvent OnCollisionUnbound;
 
-    public BoundStats stats;
+    public event BoundUnboundEvent onUnbound;
+    public float BreakingForce;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        
+        if(collision.collider.tag == "Cells" && _isBreaking(collision.relativeVelocity.magnitude)){
 
-        //if(collision.relativeVelocity)
+            onUnbound?.Invoke(this.gameObject);
 
-        Debug.Log(collision.relativeVelocity);
+        }
 
     }
 
-    public void CheckUnbound(float collisionVelocity){
+    private bool _isBreaking(float currentForce){
 
-        if(collisionVelocity > stats.MaxBreakingForce){
-
-            OnCollisionUnbound?.Invoke();
-
-        }
+        throw new NotImplementedException();
 
     }
 

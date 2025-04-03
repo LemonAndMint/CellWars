@@ -836,8 +836,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRB: {fileID: 135800106}
   forceMultiplier: 1000
-  spinSpeed: 5
-  maxAngularVelocity: 15
+  spinSpeed: 10
+  maxAngularVelocity: 30
 --- !u!114 &852106219
 MonoBehaviour:
   m_ObjectHideFlags: 0

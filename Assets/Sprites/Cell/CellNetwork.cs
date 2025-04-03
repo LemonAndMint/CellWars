@@ -76,7 +76,7 @@ namespace Network
 
         public bool RemoveBound(GameObject boundGO){
 
-            Node? parentCellNode = _searchBoundRecursive(_mainCellNode, boundGO);
+            Node? parentCellNode = _searchRecursive(_mainCellNode, boundGO);
 
             if(parentCellNode != null){
 
@@ -158,45 +158,12 @@ namespace Network
 
 
         /// <returns>Gets parent cell.</returns>
-        private Node _searchRecursive(Node currNode, GameObject goToBeUnbound){
+        private Node _searchRecursive(Node currNode, GameObject boundGO){
 
             for (int i = 0; i < currNode.Nodes.Length; i++)
             {
                 
-                if(currNode.Nodes[i]?.NextNode.CellGO != goToBeUnbound){
-
-                    if(currNode.Nodes[i]?.NextNode != null){
-
-                        Node node = _searchRecursive(currNode.Nodes[i]?.NextNode, goToBeUnbound);
-
-                        if(node != null){// which is currNode from prev recursion.
-
-                            return node;
-
-                        }
-                        
-                    }
-
-                }
-                else{
-                    
-                    return currNode;
-
-                }
-
-            }
-
-            return null;
-
-        }
-
-        /// <returns>Gets parent cell.</returns>
-        private Node _searchBoundRecursive(Node currNode, GameObject boundGO){
-
-            for (int i = 0; i < currNode.Nodes.Length; i++)
-            {
-                
-                if(currNode.Nodes[i]?.BoundGO != boundGO){
+                if(currNode.Nodes[i]?.NextNode.CellGO != boundGO){
 
                     if(currNode.Nodes[i]?.NextNode != null){
 
@@ -257,7 +224,6 @@ namespace Network
         }*/
 
     }
-
 
     public static class CellNetworkCreater
     {
@@ -324,7 +290,7 @@ namespace Network
                 Bound bound = new Bound { 
 
                     NextNode = boundedCell,
-                    BoundGO = boundGO
+                    BoundGO = boundGO,
 
                 };
 

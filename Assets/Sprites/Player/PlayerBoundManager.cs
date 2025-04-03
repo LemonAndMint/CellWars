@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Network;
 using UnityEngine;
 
@@ -7,8 +8,11 @@ public class BoundManager : MonoBehaviour
     public string GameObjectPlayerLayerString;
     public string GameObjectLayerString;
     public string RigidbodyExcludeLayerString;
+    [Space(5f)]
     public GameObject BoundPrefb;
     public Rigidbody2D mainRb;
+
+    public delegate void BoundUnboundEvent(GameObject bound);
 
     /// <summary>
     /// bind trans is parent cell
@@ -79,20 +83,11 @@ public class BoundManager : MonoBehaviour
             rigidbody2D.excludeLayers &= ~mask;
             //reverse what we have done in Bound operation
 
-            rigidbody2D.AddForce(rigidbody2D.transform.up * mainRb.angularVelocity * 10, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(-rigidbody2D.transform.up * mainRb.angularVelocity, ForceMode2D.Impulse);
 
         }
 
         Destroy(bound?.BoundGO);
-
-    }
-
-    private Vector2 _angleToVector( float angle ){
-
-        float realRotation = angle % 360f;
-        Vector2 direcVect = new Vector2(Mathf.Cos(realRotation), Mathf.Sin(realRotation));
-
-        return direcVect;
 
     }
     
